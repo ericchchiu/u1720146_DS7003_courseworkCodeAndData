@@ -1,6 +1,8 @@
+#uel 19/20 DS7003
+#WARNING! because there is a non-ascii character â in the code, after importing this code to RStudio, one should select File -> Reopen with encoding... then select UTF-8
 #Jane Austen vs John Muir. Each 400 lines x 1000 words divided into 100 documents.
 #so each document 4000 words and total 200 documents
-#use tm's dtm
+#use dtm of package tm to form the document-word table
 
 #set working directory and load package tm
 setwd(dirname(file.choose()))
@@ -35,38 +37,12 @@ JAAndJMdtDf400OrMore <- JAAndJMdtDf[, colSums(JAAndJMdtDf) >=400]#231 columns
 #delete single character columns (but not m: reason: i'm/ t: can't/ etc.)
 JAAndJMdtDf400OrMore[ ,c('â', 'e', 'f', 'h', 'j', 'l', 'n', 'o', 'r', 'u', 'v')] <- list(NULL)#231 to 220
 
-#delete this for loop method
-##a function for summing a fixed number of lines of a document term df
-#dfEach4RWdNoOfOccu = function (dtDf, noOfRowsADoc) {
-#     for (i in 1: nrow(dtDf)) {
-#         if (i%%noOfRowsADoc == 1) {
-#             df <- dtDf[i,]
-#         }
-#         else if (i%%noOfRowsADoc != 0) {
-#             df <- rbind(df, dtDf[i,])
-#         }
-#         else {
-#             if ( i == noOfRowsADoc) {
-#                 z = colSums(rbind(df, dtDf[i,]))
-#             }
-#             else {
-#                 df <- colSums(rbind(df, dtDf[i,]))
-#                 z = rbind(z, df)
-#             }
-#         }
-#     }
-#     return(z)
-# }
-##use the above function, number of lines is 4. add label JA and JM 
-#dfJaAndJmWdFeqDf <- dfEach4RWdNoOfOccu(JAAndJMdtDf400OrMore, 4)
-#dfJaAndJmWdFeqDf <- as.data.frame(dfJaAndJmWdFeqDf)
-
 #aggreate and sum every four lines
 JAAndJMdtDf400OrMore$textNo <- rep(1:200, each = 4)
 dfJaAndJmWdFeqDf <- aggregate(. ~ textNo, JAAndJMdtDf400OrMore, sum)
 dfJaAndJmWdFeqDf$textNo <- NULL
 
-#add labels JA and JM
+#add labels JA and JM and put the label column to the front
 dfJaAndJmWdFeqDf$JAOrJM <- c(rep('JA', 100), rep('JM', 100))
 dfJaAndJmWdFeqDfLabled <- dfJaAndJmWdFeqDf[,c(221,1:220)]
 
@@ -85,4 +61,4 @@ dfJaAndJmWdFeqDfLabledRandm_norm_train <- dfJaAndJmWdFeqDfLabledRandm_norm[1:160
 dfJaAndJmWdFeqDfLabledRandm_norm_test <- dfJaAndJmWdFeqDfLabledRandm_norm[161:200,]
 JaOrJm_pred <- knn(dfJaAndJmWdFeqDfLabledRandm_norm_train, dfJaAndJmWdFeqDfLabledRandm_norm_test, dfJaAndJmWdFeqDfLabledRandm[1:160,1], k= 13)
 #show cross table
-table(JaOrJm_pred, dfJaAndJmWdFeqDfLabledRandm[161:200,1])
+table(JaOrJm_pred, dfJaAndJmWdFeqDfLabledRandm[161:200,1]) #all correct
