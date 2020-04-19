@@ -1,4 +1,4 @@
-#Using three popular female novelists all born in the 1850s: 17 Helen Mathers 1853-1920 (18010- 18669 in csv file), 32 Lucas Malet 1852-1931 (33861-34563), 33 Marie Corelli 1855-1924 (34564-36305)
+#Three popular female novelists all born in the 1850s: 17 Helen Mathers 1853-1920 (18010- 18669 in the kaggle csv file), 32 Lucas Malet 1852-1931 (33861-34563), 33 Marie Corelli 1855-1924 (34564-36305)
 
 #set working directory and load package tm
 setwd(dirname(file.choose()))
@@ -6,7 +6,7 @@ getwd()
 library(tm)
 
 #input data and form three dataframes
-#be careful of the correctness of the filenames, etc.
+#be careful of the correctness of the filenames
 #for example, hyphen or underscore?
 dfVictorianEraAA <- read.table('Gungor_2018_VictorianAuthorAttribution_data_train.csv', header = TRUE, sep = (','))
 dfHelen_Mathers18009_18208 <- dfVictorianEraAA[18009:18208,]
@@ -44,7 +44,7 @@ HmLmMcTtl300OrMore$textNo <- rep(1:150, each = 4)
 dfHmLmMcWdFeqDf <- aggregate(. ~ textNo, HmLmMcTtl300OrMore, sum)
 dfHmLmMcWdFeqDf$textNo <- NULL
 
-#add labels HM, LM and MC
+#add labels HM, LM and MC and put the column to the front
 dfHmLmMcWdFeqDf$HmOrLmOrMc <- c(rep('HM', 50), rep('LM', 50), rep('MC', 50))
 dfHmLmMcWdFeqDfLabled = dfHmLmMcWdFeqDf[,c(237,1:236)] #236+1
 
@@ -63,15 +63,30 @@ library(class)
 dfHmLmMcWdFeqDfLabledRandm_norm_train <- dfHmLmMcWdFeqDfLabledRandm_norm[1:120,]
 dfHmLmMcWdFeqDfLabledRandm_norm_test <- dfHmLmMcWdFeqDfLabledRandm_norm[121:150,]
 HmOrLmOrMc_pred <- knn(dfHmLmMcWdFeqDfLabledRandm_norm_train, dfHmLmMcWdFeqDfLabledRandm_norm_test, dfHmLmMcWdFeqDfLabledRandm[1:120,1], k= 11)
-table(HmOrLmOrMc_pred, dfHmLmMcWdFeqDfLabledRandm[121:150,1])
+table(HmOrLmOrMc_pred, dfHmLmMcWdFeqDfLabledRandm[121:150,1]) #all correct
 #confusion tables see photos. sqrt(120) = 10.954 . Therefore use k =11. 
 #k = 11 perform the best, only one error: 1 MC was misjudged as LM
 
+#SVM! simple: no tunning
 library("e1071")
 HmOrLmOrMc_svm_model <- svm(dfHmLmMcWdFeqDfLabledRandm_norm_train, dfHmLmMcWdFeqDfLabledRandm[1:120,1], type = 'C')
 pred <- predict(HmOrLmOrMc_svm_model, dfHmLmMcWdFeqDfLabledRandm_norm_test)
 table(pred, dfHmLmMcWdFeqDfLabledRandm[121:150,1])
 #all correct
+
+#tune to find optimal costs
+dfHmLmMcWdFeqDfLabledRandm1To120AsFactors = as.factor(dfHmLmMcWdFeqDfLabledRandm[1:120,1])
+set.seed(12345)
+svm_tune <- tune(svm, train.x = dfHmLmMcWdFeqDfLabledRandm_norm_train,
+						train.y = dfHmLmMcWdFeqDfLabledRandm1To120AsFactors,
+						kernel = 'linear',
+						#type = 'C',
+						ranges = list(cost = c(.001,.01,.1,1,5,10,100)))
+print(svm_tune) #no sufficient information. Just provide the best cost 
+# use svm$best.model
+#besides best cost, also best number of support vectors, etc.
+pred_svm_after_tune <- predict(svm_tune$best.model, dfHmLmMcWdFeqDfLabledRandm_norm_test)
+table(pred_svm_after_tune, dfHmLmMcWdFeqDfLabledRandm[121:150,1])
 
 
 
