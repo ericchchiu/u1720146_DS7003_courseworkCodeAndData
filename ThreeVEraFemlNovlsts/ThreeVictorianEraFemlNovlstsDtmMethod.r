@@ -1,4 +1,6 @@
 #Three popular female novelists all born in the 1850s: 17 Helen Mathers 1853-1920 (18010- 18669 in the kaggle csv file), 32 Lucas Malet 1852-1931 (33861-34563), 33 Marie Corelli 1855-1924 (34564-36305)
+#200 lines each
+#there is a â in the code. If this code is loaded to RStudio, the encoding of which should be changed to UTF-8
 
 #set working directory and load package tm
 setwd(dirname(file.choose()))
@@ -63,7 +65,7 @@ library(class)
 dfHmLmMcWdFeqDfLabledRandm_norm_train <- dfHmLmMcWdFeqDfLabledRandm_norm[1:120,]
 dfHmLmMcWdFeqDfLabledRandm_norm_test <- dfHmLmMcWdFeqDfLabledRandm_norm[121:150,]
 HmOrLmOrMc_pred <- knn(dfHmLmMcWdFeqDfLabledRandm_norm_train, dfHmLmMcWdFeqDfLabledRandm_norm_test, dfHmLmMcWdFeqDfLabledRandm[1:120,1], k= 11)
-table(HmOrLmOrMc_pred, dfHmLmMcWdFeqDfLabledRandm[121:150,1]) #all correct
+table(pred = HmOrLmOrMc_pred, true_HelenMathers_LucasMalet_MarieCorelli_KNN = dfHmLmMcWdFeqDfLabledRandm[121:150,1]) #all correct
 #confusion tables see photos. sqrt(120) = 10.954 . Therefore use k =11. 
 #k = 11 perform the best, only one error: 1 MC was misjudged as LM
 
@@ -71,7 +73,7 @@ table(HmOrLmOrMc_pred, dfHmLmMcWdFeqDfLabledRandm[121:150,1]) #all correct
 library("e1071")
 HmOrLmOrMc_svm_model <- svm(dfHmLmMcWdFeqDfLabledRandm_norm_train, dfHmLmMcWdFeqDfLabledRandm[1:120,1], type = 'C')
 pred <- predict(HmOrLmOrMc_svm_model, dfHmLmMcWdFeqDfLabledRandm_norm_test)
-table(pred, dfHmLmMcWdFeqDfLabledRandm[121:150,1])
+table(pred, true_HelenMathers_LucasMalet_MarieCorelli_SVM = dfHmLmMcWdFeqDfLabledRandm[121:150,1])
 #all correct
 
 #tune to find optimal costs
@@ -86,10 +88,5 @@ print(svm_tune) #no sufficient information. Just provide the best cost
 # use svm$best.model
 #besides best cost, also best number of support vectors, etc.
 pred_svm_after_tune <- predict(svm_tune$best.model, dfHmLmMcWdFeqDfLabledRandm_norm_test)
-table(pred_svm_after_tune, dfHmLmMcWdFeqDfLabledRandm[121:150,1])
-
-
-
-
-
+table(pred = pred_svm_after_tune, true_HelenMathers_LucasMalet_MarieCorelli_TunedSVM = dfHmLmMcWdFeqDfLabledRandm[121:150,1])
 

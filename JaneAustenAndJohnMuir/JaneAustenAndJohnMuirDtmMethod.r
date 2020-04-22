@@ -1,5 +1,5 @@
 #uel 19/20 DS7003
-#WARNING! because there is a non-ascii character â in the code, after importing this code to RStudio, one should select File -> Reopen with encoding... then select UTF-8
+#WARNING! because there is a non-ascii character â in the code, after importing this code to RStudio, one should select File -> Reopen with encoding... then select UTF-8 (Windows) 
 #Jane Austen vs John Muir. Each 400 lines x 1000 words divided into 100 documents.
 #so each document 4000 words and total 200 documents
 #use dtm of package tm to form the document-word table
@@ -61,4 +61,4 @@ dfJaAndJmWdFeqDfLabledRandm_norm_train <- dfJaAndJmWdFeqDfLabledRandm_norm[1:160
 dfJaAndJmWdFeqDfLabledRandm_norm_test <- dfJaAndJmWdFeqDfLabledRandm_norm[161:200,]
 JaOrJm_pred <- knn(dfJaAndJmWdFeqDfLabledRandm_norm_train, dfJaAndJmWdFeqDfLabledRandm_norm_test, dfJaAndJmWdFeqDfLabledRandm[1:160,1], k= 13)
 #show cross table
-table(JaOrJm_pred, dfJaAndJmWdFeqDfLabledRandm[161:200,1]) #all correct
+table(pred = JaOrJm_pred, true_JaneAusten_JohnMuir_KNN = dfJaAndJmWdFeqDfLabledRandm[161:200,1]) #all correct
