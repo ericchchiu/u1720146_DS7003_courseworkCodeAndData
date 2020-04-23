@@ -1,20 +1,24 @@
 #3 hours to run! 
 #if open this code to RStudio. After opened it,
-#select File -> Reopen with Encoding -> UTF-8
-#Reason: need to recognised the 'a head(caret)' symbol
+#select File -> Reopen with Encoding -> UTF-8 (if the default encoding is not UTF-8 (Windows: usually ISO 8859-1)
+#Reason: need to recognised the non-ascii symbol â
+
+#set working file
 setwd(dirname(file.choose()))
 getwd()
+
+#input data
 dfVictorianEraAA <- read.table('Gungor_2018_VictorianAuthorAttribution_data_train.csv', header = TRUE, sep = (','))
 
 dfJaneAusten26674_27073 <- dfVictorianEraAA[26674:27073,]
 dfJaneAusten26674_27073$textNo <- rep(1:100, each = 4)
 dfJaneAusten26674_27073 <- dfJaneAusten26674_27073[c('textNo', 'text')]
-write.table(dfJaneAusten26674_27073, 'dfJaneAusten26674_27073.csv', quote = FALSE, sep = ',', row.names = FALSE)
+#write.table(dfJaneAusten26674_27073, 'dfJaneAusten26674_27073.csv', quote = FALSE, sep = ',', row.names = FALSE)
 
 dfJohnMuir31420_31819 <- dfVictorianEraAA[31420:31819,]
 dfJohnMuir31420_31819$textNo <- rep(1:100, each = 4)
 dfJohnMuir31420_31819 <- dfJohnMuir31420_31819[c('textNo', 'text')]
-write.table(dfJohnMuir31420_31819, 'dfJohnMuir31420_31819.csv', quote = FALSE, sep = ',', row.names = FALSE)
+#write.table(dfJohnMuir31420_31819, 'dfJohnMuir31420_31819.csv', quote = FALSE, sep = ',', row.names = FALSE)
 
 combineTwoListsAsOne <- function (list1, list2) {
 n <- c()
@@ -65,8 +69,8 @@ df[paste(i)] <- c(num)
 }
 return(df)
 }
-JA_NoOfWdsInJAnJMUniqWdLst = A(listOfWordsAppearingInBothJAAndJM, dfJaneAusten26674_27073)
-JM_NoOfWdsInJAnJMUniqWdLst = A(listOfWordsAppearingInBothJAAndJM, dfJohnMuir31420_31819)
+JA_NoOfWdsInJAnJMUniqWdLst = A(listOfWordsAppearingInBothJAAndJM, dfJaneAusten26674_27073) #more than 1.5 hour to run this line
+JM_NoOfWdsInJAnJMUniqWdLst = A(listOfWordsAppearingInBothJAAndJM, dfJohnMuir31420_31819) #more than 1.5 hour to run this line
 JAnJMJoin_NoOfWdsInJAnJMUniqWdLst = rbind(JA_NoOfWdsInJAnJMUniqWdLst, JM_NoOfWdsInJAnJMUniqWdLst)
 JaJmTtl400OrMore = JAnJMJoin_NoOfWdsInJAnJMUniqWdLst[, colSums(JAnJMJoin_NoOfWdsInJAnJMUniqWdLst) >=400]
 JaJmTtl400OrMoreByAlpha = JaJmTtl400OrMore[,order(names(JaJmTtl400OrMore))]#ok
@@ -123,6 +127,7 @@ dfJaAndJmWdFeqDfLabledRandm <- dfJaAndJmWdFeqDfLabled[rrowNos,]#ok
 #normalisation of columns
 data_norm <- function(x) {(x- min(x))/ (max(x)- min(x))}
 dfJaAndJmWdFeqDfLabledRandm_norm <- as.data.frame(lapply(dfJaAndJmWdFeqDfLabledRandm[,-1], data_norm))#ok
+summary(dfJaAndJmWdFeqDfLabledRandm_norm[,1:4])
 ####################################################
 #KNN!
 library(class)

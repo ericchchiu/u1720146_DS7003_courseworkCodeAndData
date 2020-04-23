@@ -54,6 +54,7 @@ dfJaAndJmWdFeqDfLabledRandm <- dfJaAndJmWdFeqDfLabled[rrowNos,]#ok
 #normalising columns
 data_norm <- function(x) {(x- min(x))/ (max(x)- min(x))}
 dfJaAndJmWdFeqDfLabledRandm_norm <- as.data.frame(lapply(dfJaAndJmWdFeqDfLabledRandm[,-1], data_norm))#ok
+summary(dfJaAndJmWdFeqDfLabledRandm_norm[,1:4])
 
 #KNN!
 library(class)

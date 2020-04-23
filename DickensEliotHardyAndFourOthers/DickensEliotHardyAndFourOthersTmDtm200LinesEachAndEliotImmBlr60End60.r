@@ -140,7 +140,7 @@ dfGeEndWdFeqDf_normNotReal = normGeEtc(dfGeEndWdFeqDf_normNotReal, dfGeEndWdFeqD
 
 #KNN! 
 set.seed(12345)
-all20GeEnd_knn_pred <- knn(dfAll7WdFeqDfLabledRandm_norm_train, dfGeEndWdFeqDf_normNotReal, dfAll7WdFeqDfLabledRandm[1:280,1], k= 14)
+all20GeEnd_knn_pred <- knn(dfAll7WdFeqDfLabledRandm_norm_train, dfGeEndWdFeqDf_normNotReal, dfAll7WdFeqDfLabledRandm[1:280,1], k= 18)
 table(pred = all20GeEnd_knn_pred, true_GeorgeEliotEnd_KNN = rep('GE', 20)) #mistake rate 4/20
 
 #svm_no_tune
@@ -176,7 +176,7 @@ return(x)
 dfGeImmBlwWdFeqDf_normNotReal = (dfGeImmBlwWdFeqDf_addMaxMin[1,] - dfGeImmBlwWdFeqDf_addMaxMin[22,]) / (dfGeImmBlwWdFeqDf_addMaxMin[21,] - dfGeImmBlwWdFeqDf_addMaxMin[22,])
 dfGeImmBlwWdFeqDf_normNotReal = normGeEtc(dfGeImmBlwWdFeqDf_normNotReal, dfGeImmBlwWdFeqDf_addMaxMin)
 
-all20GeImmBlw_knn_pred <- knn(dfAll7WdFeqDfLabledRandm_norm_train, dfGeImmBlwWdFeqDf_normNotReal, dfAll7WdFeqDfLabledRandm[1:280,1], k= 14)
+all20GeImmBlw_knn_pred <- knn(dfAll7WdFeqDfLabledRandm_norm_train, dfGeImmBlwWdFeqDf_normNotReal, dfAll7WdFeqDfLabledRandm[1:280,1], k= 18)
 table(pred = all20GeImmBlw_knn_pred, true_GeorgeEliotImmBlw_KNN = rep('GE', 20)) #mistake rate 1/20  
 
 #svm_no_tune

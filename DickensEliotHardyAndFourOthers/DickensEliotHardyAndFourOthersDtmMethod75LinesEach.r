@@ -186,6 +186,3 @@ table(pred_svm_GeEnd, rep('GE', 20)) #mistake rate 3/20: slightly better
 #svm_tuned
 pred_svm_after_tune_GeEnd <- predict(svm_tune$best.model, dfGeImmBlwWdFeqDf_normNotReal)
 table(pred_svm_after_tune_GeEnd, rep('GE', 20)) #mistake rate 2/20: slightly better
-
-#time code:
-proc.time() - ptm #41 seconds in my pc
