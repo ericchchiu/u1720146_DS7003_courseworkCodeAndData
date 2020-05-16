@@ -192,9 +192,6 @@ table(pred = pred_svm_after_tune_GeImmBlw, true_GeorgeEliotImmBlw_tunedSVM = rep
 #data file name: GutenbergMiddlemarch_5PortionsEach4000Words.csv
 #The KNN and SVM models produced above can correctly recognise that all the 5 portions were written by George Eliot. 
 
-#Check whether the knn and svm models developed above (using the first 200 lines of each of the seven authors) can recognise that the 20 documents (each x 4000 words) complied with George Eliot's lines extracted from immediately below the first 200 lines were written by her. 
-#need to use package tm
-
 dfGutenbergMiddlemarch <- read.table('GutenbergMiddlemarch_5PortionsEach4000Words.csv', header = TRUE, sep = (','))
 dfGutenbergMiddlemarch_corpus <- VCorpus(VectorSource(dfGutenbergMiddlemarch$text))
 dfGutenbergMiddlemarch_dtDf <- as.data.frame(as.matrix(DocumentTermMatrix(dfGutenbergMiddlemarch_corpus, control=list(wordLengths = c(1, Inf)))))
