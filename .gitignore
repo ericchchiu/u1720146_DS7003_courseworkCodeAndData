@@ -1,5 +1,5 @@
-Gungor_2018_VictorianAuthorAttribution_data_train.csv
 *.csv
+!GutenbergMiddlemarch_5PortionsEach4000Words.csv
 *.Rhistory
 *.RData
 

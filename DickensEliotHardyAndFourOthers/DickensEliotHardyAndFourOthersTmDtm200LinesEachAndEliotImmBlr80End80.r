@@ -187,3 +187,33 @@ table(pred = pred_svm_GeImmBlw, true_GeorgeEliotImmBlw_SVM = rep('GE', 20)) #all
 pred_svm_after_tune_GeImmBlw <- predict(svm_tune$best.model, dfGeImmBlwWdFeqDf_normNotReal)
 table(pred = pred_svm_after_tune_GeImmBlw, true_GeorgeEliotImmBlw_tunedSVM = rep('GE', 20)) #mistake rate: 1/20
 
+#---------------------------------------------------------------
+#The data file contains George Eliot's masterpiece Middlemarch (300000+ words). However, it is in the region around line 15000, not in the lines already used above (lines 13670 - 13949 and 16286 - 16368). Therefore, a copy of this novel was obtained from the famous Gutenberg book corpus and from which 5 portions of words were extracted for doing the below experiment (Each portion contains 4000 words. All words in lowercase. All numbers and punctuation and most person and place names were deleted)
+#data file name: GutenbergMiddlemarch_5PortionsEach4000Words.csv
+#The KNN and SVM models produced above can correctly recognise that all the 5 portions were written by George Eliot. 
+
+#Check whether the knn and svm models developed above (using the first 200 lines of each of the seven authors) can recognise that the 20 documents (each x 4000 words) complied with George Eliot's lines extracted from immediately below the first 200 lines were written by her. 
+#need to use package tm
+
+dfGutenbergMiddlemarch <- read.table('GutenbergMiddlemarch_5PortionsEach4000Words.csv', header = TRUE, sep = (','))
+dfGutenbergMiddlemarch_corpus <- VCorpus(VectorSource(dfGutenbergMiddlemarch$text))
+dfGutenbergMiddlemarch_dtDf <- as.data.frame(as.matrix(DocumentTermMatrix(dfGutenbergMiddlemarch_corpus, control=list(wordLengths = c(1, Inf)))))
+dfGutenbergMiddlemarch_dtDf$textNo <- NULL
+dfGutenbergMiddlemarch_dtDf[setdiff(colnames(dfAll7WdFeqDfLabled), colnames(dfGutenbergMiddlemarch_dtDf))] <- 0
+dfGutenbergMiddlemarchWdFeqDf <- dfGutenbergMiddlemarch_dtDf[colnames(dfAll7WdFeqDfLabled)]
+dfGutenbergMiddlemarchWdFeqDf$Label <- NULL #delete Label col
+dfGutenbergMiddlemarchWdFeqDf_addMaxMin = rbind(dfGutenbergMiddlemarchWdFeqDf, apply(dfAll7WdFeqDfLabledRandm[,-1], 2, max), apply(dfAll7WdFeqDfLabledRandm[,-1], 2, min))
+dfGutenbergMiddlemarchWdFeqDf_normNotReal = (dfGutenbergMiddlemarchWdFeqDf_addMaxMin[1,] - dfGutenbergMiddlemarchWdFeqDf_addMaxMin[7,]) / (dfGutenbergMiddlemarchWdFeqDf_addMaxMin[6,] - dfGutenbergMiddlemarchWdFeqDf_addMaxMin[7,])
+dfGutenbergMiddlemarchWdFeqDf_normNotReal = normGeEtc(dfGutenbergMiddlemarchWdFeqDf_normNotReal, dfGutenbergMiddlemarchWdFeqDf_addMaxMin)
+
+#KNN! 
+set.seed(12345)
+all5GEMiddlemarch_knn_pred <- knn(dfAll7WdFeqDfLabledRandm_norm_train, dfGutenbergMiddlemarchWdFeqDf_normNotReal, dfAll7WdFeqDfLabledRandm[1:280,1], k= 18)
+table(pred = all5GEMiddlemarch_knn_pred, true_GeorgeEliotMiddlemarch_KNN = rep('GE(Middlemarch5Portions)', 5)) #all correct
+
+#svm_no_tune
+pred_svm_all5GEMiddlemarch <- predict(whichOfThe7_svm_model, dfGutenbergMiddlemarchWdFeqDf_normNotReal)
+table(pred = pred_svm_all5GEMiddlemarch, true_GeorgeEliotMiddlemarch_SVM = rep('GE(Middlemarch5Portions)', 5)) #all correct
+#svm_tuned
+pred_svm_after_tune_all5GEMiddlemarch <- predict(svm_tune$best.model, dfGutenbergMiddlemarchWdFeqDf_normNotReal)
+table(pred = pred_svm_after_tune_all5GEMiddlemarch, true_GeorgeEliotMiddlemarch_tunedSVM = rep('GE(Middlemarch5Portions)', 5)) #all correct
