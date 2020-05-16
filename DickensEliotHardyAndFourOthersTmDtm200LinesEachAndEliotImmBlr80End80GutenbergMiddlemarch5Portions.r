@@ -10,7 +10,7 @@ library(tm)
 
 #input data and form seven dataframes
 #please pay attention to file names. e.g. hyphen or underscore?
-dfVictorianEraAA <- read.table('Gungor_2018_VictorianAuthorAttribution_data_train.csv', header = TRUE, sep = (','))
+dfVictorianEraAA <- read.table('Gungor_2018_VictorianAuthorAttribution_data-train.csv', header = TRUE, sep = (','))
 dfCharles_Dickens3398_3597 <- dfVictorianEraAA[3398:3597,]
 dfFergue_Hume12558_12757 <- dfVictorianEraAA[12558:12757,]
 dfGeorge_Eliot13670_13869 <- dfVictorianEraAA[13670:13869,]

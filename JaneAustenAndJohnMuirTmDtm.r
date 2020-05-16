@@ -10,7 +10,7 @@ getwd()
 library(tm)
 
 #input data and form two dataframes
-dfVictorianEraAA <- read.table('Gungor_2018_VictorianAuthorAttribution_data_train.csv', header = TRUE, sep = (','))
+dfVictorianEraAA <- read.table('Gungor_2018_VictorianAuthorAttribution_data-train.csv', header = TRUE, sep = (','))
 dfJA26674_27073 <- dfVictorianEraAA[26674:27073,]
 dfJM31420_31819 <- dfVictorianEraAA[31420:31819,]
 

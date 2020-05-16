@@ -3,7 +3,7 @@
 Warning! Before running the code, encoding should be changed to UTF-8!
 (In RSutdio, File -> Reopen with Encoding... Then change the encoding)
 
-One of the two data files,  Gungor_2018_VictorianAuthorAttribution_data_train.csv, is too large (259,361KB) to be uploaded to github. However, it can be downloaded from:
+One of the two data files,  Gungor_2018_VictorianAuthorAttribution_data-train.csv, is too large (259,361KB) to be uploaded to github. However, it can be downloaded from:
 
 http://archive.ics.uci.edu/ml/datasets/Victorian+Era+Authorship+Attribution
 

@@ -8,7 +8,7 @@ setwd(dirname(file.choose()))
 getwd()
 
 #input data
-dfVictorianEraAA <- read.table('Gungor_2018_VictorianAuthorAttribution_data_train.csv', header = TRUE, sep = (','))
+dfVictorianEraAA <- read.table('Gungor_2018_VictorianAuthorAttribution_data-train.csv', header = TRUE, sep = (','))
 
 #produce two dataframes.
 #one for Jane Austen's texts (JA) and one for John Muir's texts (JM)
