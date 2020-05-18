@@ -4,4 +4,6 @@
 !GutenbergTessOfTheDUrb_3PortionsEach4000Words.csv
 *.Rhistory
 *.RData
+*.zip
+dataset/
 preparationWorks/

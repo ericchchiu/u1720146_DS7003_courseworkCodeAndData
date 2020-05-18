@@ -1,4 +1,4 @@
-#3 hours to run! 
+#this code needs 3 hours to run! 
 #if open this code to RStudio. After opened it,
 #select File -> Reopen with Encoding -> UTF-8 (if the default encoding is not UTF-8 (Windows: usually ISO 8859-1)
 #Reason: need to recognised the non-ascii symbol â (it should be an a with a caret!)
@@ -8,6 +8,13 @@ setwd(dirname(file.choose()))
 getwd()
 
 #input data
+if(!file.exists('Gungor_2018_VictorianAuthorAttribution_data-train.csv')){
+	download.file('http://archive.ics.uci.edu/ml/machine-learning-databases/00454/dataset.zip', 'dataset.zip')
+	unzip('dataset.zip')
+	file.copy('./dataset/Gungor_2018_VictorianAuthorAttribution_data-train.csv', '.')
+#if the working directory does not have the csv file, this if statement
+#needs several minutes to run
+}
 dfVictorianEraAA <- read.table('Gungor_2018_VictorianAuthorAttribution_data-train.csv', header = TRUE, sep = (','))
 
 #produce two dataframes.

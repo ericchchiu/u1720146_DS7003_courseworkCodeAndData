@@ -8,8 +8,13 @@ getwd()
 library(tm)
 
 #input data and form three dataframes
-#be careful of the correctness of the filenames
-#for example, hyphen or underscore?
+if(!file.exists('Gungor_2018_VictorianAuthorAttribution_data-train.csv')){
+	download.file('http://archive.ics.uci.edu/ml/machine-learning-databases/00454/dataset.zip', 'dataset.zip')
+	unzip('dataset.zip')
+	file.copy('./dataset/Gungor_2018_VictorianAuthorAttribution_data-train.csv', '.')
+#if the working directory does not have the csv file, this if statement
+#needs several minutes to run
+}
 dfVictorianEraAA <- read.table('Gungor_2018_VictorianAuthorAttribution_data-train.csv', header = TRUE, sep = (','))
 dfHelen_Mathers18009_18208 <- dfVictorianEraAA[18009:18208,]
 dfLucas_Malet33860_34059 <- dfVictorianEraAA[33860:34059,]
