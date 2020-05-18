@@ -188,29 +188,32 @@ pred_svm_after_tune_GeImmBlw <- predict(svm_tune$best.model, dfGeImmBlwWdFeqDf_n
 table(pred = pred_svm_after_tune_GeImmBlw, true_GeorgeEliotImmBlw_tunedSVM = rep('GE', 20)) #mistake rate: 1/20
 
 #---------------------------------------------------------------
-#The data file contains George Eliot's masterpiece Middlemarch (300000+ words). However, it is in the region around line 15000, not in the lines already used above (lines 13670 - 13949 and 16286 - 16368). Therefore, a copy of this novel was obtained from the famous Gutenberg book corpus and from which 5 portions of words were extracted for doing the below experiment (Each portion contains 4000 words. All words in lowercase. All numbers and punctuation and most person and place names were deleted)
-#data file name: GutenbergMiddlemarch_5PortionsEach4000Words.csv
-#The KNN and SVM models produced above can correctly recognise that all the 5 portions were written by George Eliot. 
+#The data file contains Charles Dickens's masterpiece A Tale of Two Cities, George Eliot's Middlemarch (300000+ words),  and Thomas Hardy's Tess of the d'Urbervilles. However, they have not been used in the above experiments. Therefore, copies of these three novels were obtained from the famous Gutenberg book corpus and from which 3 portions of words were extracted from A Tale of Two Cities, 5 from Middlemarch and 3 from Tess of the d'Urbervilles for doing the below experiment (Each portion contains 4000 words, all words are in lowercase and all punctuation were deleted)
+#data file names: GutenbergATaleOf2C_3PortionsEach4000Words.csv, GutenbergMiddlemarch_5PortionsEach4000Words.csv and GutenbergTessOfTheDUrb_3PortionsEach4000Words.csv
+#The KNN and SVM models produced above can recognise who wrote the 11 portions of words with 100% accuracy. 
 
+dfGutenbergATaleOf2C <- read.table('GutenbergATaleOf2C_3PortionsEach4000Words.csv', header = TRUE, sep = (','))
 dfGutenbergMiddlemarch <- read.table('GutenbergMiddlemarch_5PortionsEach4000Words.csv', header = TRUE, sep = (','))
-dfGutenbergMiddlemarch_corpus <- VCorpus(VectorSource(dfGutenbergMiddlemarch$text))
-dfGutenbergMiddlemarch_dtDf <- as.data.frame(as.matrix(DocumentTermMatrix(dfGutenbergMiddlemarch_corpus, control=list(wordLengths = c(1, Inf)))))
-dfGutenbergMiddlemarch_dtDf$textNo <- NULL
-dfGutenbergMiddlemarch_dtDf[setdiff(colnames(dfAll7WdFeqDfLabled), colnames(dfGutenbergMiddlemarch_dtDf))] <- 0
-dfGutenbergMiddlemarchWdFeqDf <- dfGutenbergMiddlemarch_dtDf[colnames(dfAll7WdFeqDfLabled)]
-dfGutenbergMiddlemarchWdFeqDf$Label <- NULL #delete Label col
-dfGutenbergMiddlemarchWdFeqDf_addMaxMin = rbind(dfGutenbergMiddlemarchWdFeqDf, apply(dfAll7WdFeqDfLabledRandm[,-1], 2, max), apply(dfAll7WdFeqDfLabledRandm[,-1], 2, min))
-dfGutenbergMiddlemarchWdFeqDf_normNotReal = (dfGutenbergMiddlemarchWdFeqDf_addMaxMin[1,] - dfGutenbergMiddlemarchWdFeqDf_addMaxMin[7,]) / (dfGutenbergMiddlemarchWdFeqDf_addMaxMin[6,] - dfGutenbergMiddlemarchWdFeqDf_addMaxMin[7,])
-dfGutenbergMiddlemarchWdFeqDf_normNotReal = normGeEtc(dfGutenbergMiddlemarchWdFeqDf_normNotReal, dfGutenbergMiddlemarchWdFeqDf_addMaxMin)
+dfGutenbergTessOfTheDUrb <- read.table('GutenbergTessOfTheDUrb_3PortionsEach4000Words.csv', header = TRUE, sep = (','))
+dfGutenberg2CitiesMddlemarchTess <- rbind(dfGutenbergATaleOf2C, dfGutenbergMiddlemarch, dfGutenbergTessOfTheDUrb)
+dfGutenberg2CitiesMddlemarchTess_corpus <- VCorpus(VectorSource(dfGutenberg2CitiesMddlemarchTess$text))
+dfGutenberg2CitiesMddlemarchTess_dtDf <- as.data.frame(as.matrix(DocumentTermMatrix(dfGutenberg2CitiesMddlemarchTess_corpus, control=list(wordLengths = c(1, Inf)))))
+#dfGutenberg2CitiesMddlemarchTess_dtDf$textNo <- NULL
+dfGutenberg2CitiesMddlemarchTess_dtDf[setdiff(colnames(dfAll7WdFeqDfLabled), colnames(dfGutenberg2CitiesMddlemarchTess_dtDf))] <- 0
+dfGutenberg2CitiesMddlemarchTessWdFeqDf <- dfGutenberg2CitiesMddlemarchTess_dtDf[colnames(dfAll7WdFeqDfLabled)]
+dfGutenberg2CitiesMddlemarchTessWdFeqDf$Label <- NULL #delete Label col
+dfGutenberg2CitiesMddlemarchTessWdFeqDf_addMaxMin = rbind(dfGutenberg2CitiesMddlemarchTessWdFeqDf, apply(dfAll7WdFeqDfLabledRandm[,-1], 2, max), apply(dfAll7WdFeqDfLabledRandm[,-1], 2, min))
+dfGutenberg2CitiesMddlemarchTessWdFeqDf_normNotReal = (dfGutenberg2CitiesMddlemarchTessWdFeqDf_addMaxMin[1,] - dfGutenberg2CitiesMddlemarchTessWdFeqDf_addMaxMin[13,]) / (dfGutenberg2CitiesMddlemarchTessWdFeqDf_addMaxMin[12,] - dfGutenberg2CitiesMddlemarchTessWdFeqDf_addMaxMin[13,])
+dfGutenberg2CitiesMddlemarchTessWdFeqDf_normNotReal <- normGeEtc(dfGutenberg2CitiesMddlemarchTessWdFeqDf_normNotReal, dfGutenberg2CitiesMddlemarchTessWdFeqDf_addMaxMin)
 
 #KNN! 
 set.seed(12345)
-all5GEMiddlemarch_knn_pred <- knn(dfAll7WdFeqDfLabledRandm_norm_train, dfGutenbergMiddlemarchWdFeqDf_normNotReal, dfAll7WdFeqDfLabledRandm[1:280,1], k= 18)
-table(pred = all5GEMiddlemarch_knn_pred, true_GeorgeEliotMiddlemarch_KNN = rep('GE(Middlemarch5Portions)', 5)) #all correct
+pred_knn_3TwoCities5Mddlemarch3Tess <- knn(dfAll7WdFeqDfLabledRandm_norm_train, dfGutenberg2CitiesMddlemarchTessWdFeqDf_normNotReal, dfAll7WdFeqDfLabledRandm[1:280,1], k= 18)
+table(pred = pred_knn_3TwoCities5Mddlemarch3Tess, true_3TwoCities5Mddlemarch3Tess_KNN = dfGutenberg2CitiesMddlemarchTess$label) #all correct
 
 #svm_no_tune
-pred_svm_all5GEMiddlemarch <- predict(whichOfThe7_svm_model, dfGutenbergMiddlemarchWdFeqDf_normNotReal)
-table(pred = pred_svm_all5GEMiddlemarch, true_GeorgeEliotMiddlemarch_SVM = rep('GE(Middlemarch5Portions)', 5)) #all correct
+pred_svm_3TwoCities5Mddlemarch3Tess <- predict(whichOfThe7_svm_model, dfGutenberg2CitiesMddlemarchTessWdFeqDf_normNotReal)
+table(pred = pred_svm_3TwoCities5Mddlemarch3Tess, true_3TwoCities5Mddlemarch3Tess_SVM = dfGutenberg2CitiesMddlemarchTess$label) #all correct
 #svm_tuned
-pred_svm_after_tune_all5GEMiddlemarch <- predict(svm_tune$best.model, dfGutenbergMiddlemarchWdFeqDf_normNotReal)
-table(pred = pred_svm_after_tune_all5GEMiddlemarch, true_GeorgeEliotMiddlemarch_tunedSVM = rep('GE(Middlemarch5Portions)', 5)) #all correct
+pred_svm_after_tune_3TwoCities5Mddlemarch3Tess <- predict(svm_tune$best.model, dfGutenberg2CitiesMddlemarchTessWdFeqDf_normNotReal)
+table(pred = pred_svm_after_tune_3TwoCities5Mddlemarch3Tess, true_3TwoCities5Mddlemarch3Tess_tunedSVM = dfGutenberg2CitiesMddlemarchTess$label) #all correct
