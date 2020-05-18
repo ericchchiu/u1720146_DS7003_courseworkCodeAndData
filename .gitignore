@@ -1,5 +1,7 @@
 *.csv
-!GutenbergMiddlemarch_5PortionsEach4000Words.csv;!GutenbergTessOfDUrb_3PortionsEach4000Words.csv
+!GutenbergATaleOf2C_3PortionsEach4000Words.csv
+!GutenbergMiddlemarch_5PortionsEach4000Words.csv
+!GutenbergTessOfDUrb_3PortionsEach4000Words.csv
 *.Rhistory
 *.RData
 preparationWorks/
