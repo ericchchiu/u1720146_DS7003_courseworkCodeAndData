@@ -1,5 +1,5 @@
 #uel 19/20 DS7003
-#WARNING! because there is a non-ascii character â in the code, after importing this code to RStudio, one should select File -> Reopen with encoding... then select UTF-8
+#WARNING!!! because there is a non-ascii character â in the code, after importing this code to RStudio, one should select File -> Reopen with encoding... then select UTF-8
 #Besides the three popular female English novelists I used in the last attempt (17 Helen Mathers 1853-1920 67 (18010- 18669 in csv file), 32 Lucas Malet 1852-1931 79 (33861-34563), 33 Marie Corelli 1855-1924 69 (34564-36305)), I added four novelists, a propular male novelist born in 1850s': 12 Fergue Hume 1859- 1932 73 (12599- 13185), 8 Charles Dickens 1812- 1870 58 (3399- 10312), 14 George Eliot, Real name Mary Ann Evans, author of Middlemarch 1819- 1880 71 (13671- 16366), 45 Thomas Hardy 1840- 1928 88 (48024- 50335)
 #Number of words extracted from each of the seven authors' texts: 50 texts of 4000 words each (32 for training and 8 for testing). 
 
@@ -198,9 +198,10 @@ table(pred = pred_svm_after_tune_GeImmBlw, true_GeorgeEliotImmBlw_tunedSVM = rep
 #data file names: GutenbergATaleOf2C_3PortionsEach4000Words.csv, GutenbergMiddlemarch_5PortionsEach4000Words.csv and GutenbergTessOfTheDUrb_3PortionsEach4000Words.csv
 #The KNN and SVM models produced above can recognise who wrote the 11 portions of words with 100% accuracy. 
 
-dfGutenbergATaleOf2C <- read.table('GutenbergATaleOf2C_3PortionsEach4000Words.csv', header = TRUE, sep = (','))
-dfGutenbergMiddlemarch <- read.table('GutenbergMiddlemarch_5PortionsEach4000Words.csv', header = TRUE, sep = (','))
-dfGutenbergTessOfTheDUrb <- read.table('GutenbergTessOfTheDUrb_3PortionsEach4000Words.csv', header = TRUE, sep = (','))
+#dfGutenbergATaleOf2C <- read.table('GutenbergATaleOf2C_3PortionsEach4000Words.csv', header = TRUE, sep = (','))
+#dfGutenbergMiddlemarch <- read.table('GutenbergMiddlemarch_5PortionsEach4000Words.csv', header = TRUE, sep = (','))
+#dfGutenbergTessOfTheDUrb <- read.table('GutenbergTessOfTheDUrb_3PortionsEach4000Words.csv', header = TRUE, sep = (','))
+dfGutenberg2CitiesMddlemarchTess <- read.table('GutenbergATaleOf2C3Middlemarch5TessOfTheDUrb3Each4000Words.csv', header = TRUE, sep = (','), comment.char = "#")
 dfGutenberg2CitiesMddlemarchTess <- rbind(dfGutenbergATaleOf2C, dfGutenbergMiddlemarch, dfGutenbergTessOfTheDUrb)
 dfGutenberg2CitiesMddlemarchTess_corpus <- VCorpus(VectorSource(dfGutenberg2CitiesMddlemarchTess$text))
 dfGutenberg2CitiesMddlemarchTess_dtDf <- as.data.frame(as.matrix(DocumentTermMatrix(dfGutenberg2CitiesMddlemarchTess_corpus, control=list(wordLengths = c(1, Inf)))))
