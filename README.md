@@ -2,10 +2,12 @@ One of the two data files to be used in this project,  Gungor_2018_VictorianAuth
 
 http://archive.ics.uci.edu/ml/datasets/Victorian+Era+Authorship+Attribution
 
+(Or if the abovementioned data file has not been placed in the working directory mentioned below before running the R code, the R code will use a few minutes to download and unzip the data file)
+
 The data file was produced by Abdulmecit Gungor for writing the thesis:
 Gungor A. (2018) Benchmarking authorship attribution techniques using over a thousand books by fifty Victorian Era novelists, Unpublished MSc Thesis, Purdue University, Available at: https://scholarworks.iupui.edu/handle/1805/15938 (Accessed: 16 May 2020).
 
-The another data file, GutenbergATaleOf2C3Middlemarch5TessOfTheDUrb3Each4000Words.csv, is in this repository
+The another data file, GutenbergATaleOf2C3Middlemarch5TessOfTheDUrb3Each4000Words.csv, is in this repository. This data file was produced with the three text files contained in this reporsitory. The three text files were obtained from https://www.gutenberg.org/
 
 Just place all files and the downloaded file mentioned above into a working directory, import the R code files to an RStudio and then run them.
 
