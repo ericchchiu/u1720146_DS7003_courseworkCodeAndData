@@ -1,12 +1,13 @@
 #uel 19/20 DS7003
 #WARNING!!! because there is a non-ascii character â in the code, after importing this code to RStudio, one should select File -> Reopen with encoding... then select UTF-8
 #Besides the three popular female English novelists I used in the last attempt (17 Helen Mathers 1853-1920 67 (18010- 18669 in csv file), 32 Lucas Malet 1852-1931 79 (33861-34563), 33 Marie Corelli 1855-1924 69 (34564-36305)), I added four novelists, a propular male novelist born in 1850s': 12 Fergue Hume 1859- 1932 73 (12599- 13185), 8 Charles Dickens 1812- 1870 58 (3399- 10312), 14 George Eliot, Real name Mary Ann Evans, author of Middlemarch 1819- 1880 71 (13671- 16366), 45 Thomas Hardy 1840- 1928 88 (48024- 50335)
-#Number of words extracted from each of the seven authors' texts: 50 texts of 4000 words each (32 for training and 8 for testing). 
+#Number of words extracted from each of the seven authors' texts: 50 texts of 4000 words each (32 for training and 8 for testing).
+#eleven portions of words extracted from A Tale of Two Cities, Middlemarch and Tess of the d'Urbervilles will also be used in the final part of this code.
 
 #set working directory and load package tm
 setwd(dirname(file.choose()))
 getwd()
-library(tm)
+if (!require('tm')) install.packages('tm'); library('tm')
 
 #input data and form seven dataframes
 if(!file.exists('Gungor_2018_VictorianAuthorAttribution_data-train.csv')){
@@ -90,14 +91,14 @@ summary(dfAll7WdFeqDfLabledRandm_norm[,1:4]) #see whether normalised
 #number of k: usually start from sqrt of data points of
 #the training set. So sqrt(280): 18
 #then trial and error
-library(class)
+if (!require('class')) install.packages('class'); library('class')
 dfAll7WdFeqDfLabledRandm_norm_train <- dfAll7WdFeqDfLabledRandm_norm[1:280,]
 dfAll7WdFeqDfLabledRandm_norm_test <- dfAll7WdFeqDfLabledRandm_norm[281:350,]
 whichOfThe7_pred <- knn(dfAll7WdFeqDfLabledRandm_norm_train, dfAll7WdFeqDfLabledRandm_norm_test, dfAll7WdFeqDfLabledRandm[1:280,1], k= 18)
 table(pred = whichOfThe7_pred, true_7Authors_KNN = dfAll7WdFeqDfLabledRandm[281:350,1])#mistake rate 1/70
 
 #SVM!
-library("e1071")
+if (!require('e1071')) install.packages('e1071'); library('e1071')
 # simple: no tunning
 whichOfThe7_svm_model <- svm(dfAll7WdFeqDfLabledRandm_norm_train, dfAll7WdFeqDfLabledRandm[1:280,1], type = 'C')
 pred <- predict(whichOfThe7_svm_model, dfAll7WdFeqDfLabledRandm_norm_test)
@@ -159,7 +160,7 @@ table(pred = pred_svm_after_tune_GeEnd, true_GeorgeEliotEnd_tunedSVM = rep('GE',
 #---------------------------------------------------------------
 #Check whether the knn and svm models developed above (using the first 200 lines of each of the seven authors) can recognise that the 20 documents (each x 4000 words) complied with George Eliot's lines extracted from immediately below the first 200 lines were written by her. 
 #need to use package tm
-#(no comment lines below. For explanations, see the above part)
+#(no comment below. For explanations, see the above part)
 
 dfGeorge_Eliot13870_13949ImmBlw <- dfVictorianEraAA[13870:13949,]
 dfGeorge_Eliot13870_13949ImmBlw_corpus <- VCorpus(VectorSource(dfGeorge_Eliot13870_13949ImmBlw$text))
@@ -194,13 +195,10 @@ pred_svm_after_tune_GeImmBlw <- predict(svm_tune$best.model, dfGeImmBlwWdFeqDf_n
 table(pred = pred_svm_after_tune_GeImmBlw, true_GeorgeEliotImmBlw_tunedSVM = rep('GE', 20)) #mistake rate: 1/20
 
 #---------------------------------------------------------------
-#The data file contains Charles Dickens's masterpiece A Tale of Two Cities, George Eliot's Middlemarch (300000+ words),  and Thomas Hardy's Tess of the d'Urbervilles. However, they have not been used in the above experiments. Therefore, copies of these three novels were obtained from the famous Gutenberg book corpus and from which 3 portions of words were extracted from A Tale of Two Cities, 5 from Middlemarch and 3 from Tess of the d'Urbervilles for doing the below experiment (Each portion contains 4000 words, all words are in lowercase and all punctuation were deleted)
-#data file names: GutenbergATaleOf2C_3PortionsEach4000Words.csv, GutenbergMiddlemarch_5PortionsEach4000Words.csv and GutenbergTessOfTheDUrb_3PortionsEach4000Words.csv
-#The KNN and SVM models produced above can recognise who wrote the 11 portions of words with 100% accuracy. 
+#The data file contains Charles Dickens's masterpiece A Tale of Two Cities, George Eliot's Middlemarch (300000+ words), and Thomas Hardy's Tess of the d'Urbervilles. However, they have not been used in the above experiments. Therefore, copies of these three novels were obtained from the famous Gutenberg book corpus and from which 3 portions of words were extracted from A Tale of Two Cities, 5 from Middlemarch and 3 from Tess of the d'Urbervilles for doing the below experiment (Each portion contains 4000 words, all words are in lowercase and all punctuation were deleted)
+#the file name of the data file: GutenbergATaleOf2C3Middlemarch5TessOfTheDUrb3Each4000Words.csv
+#The KNN and the SVM  test machines produced above can recognise who wrote the 11 portions of words with 100% accuracy. 
 
-#dfGutenbergATaleOf2C <- read.table('GutenbergATaleOf2C_3PortionsEach4000Words.csv', header = TRUE, sep = (','))
-#dfGutenbergMiddlemarch <- read.table('GutenbergMiddlemarch_5PortionsEach4000Words.csv', header = TRUE, sep = (','))
-#dfGutenbergTessOfTheDUrb <- read.table('GutenbergTessOfTheDUrb_3PortionsEach4000Words.csv', header = TRUE, sep = (','))
 dfGutenberg2CitiesMddlemarchTess <- read.table('GutenbergATaleOf2C3Middlemarch5TessOfTheDUrb3Each4000Words.csv', header = TRUE, sep = (','), comment.char = "#")
 dfGutenberg2CitiesMddlemarchTess <- rbind(dfGutenbergATaleOf2C, dfGutenbergMiddlemarch, dfGutenbergTessOfTheDUrb)
 dfGutenberg2CitiesMddlemarchTess_corpus <- VCorpus(VectorSource(dfGutenberg2CitiesMddlemarchTess$text))

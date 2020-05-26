@@ -1,7 +1,9 @@
-#this code needs 3 hours to run! 
-#if open this code to RStudio. After opened it,
-#select File -> Reopen with Encoding -> UTF-8 (if the default encoding is not UTF-8 (Windows: usually ISO 8859-1)
-#Reason: need to recognised the non-ascii symbol â (it should be an a with a caret!)
+#this code needs 3 hours to run!
+#Warning: must change encoding to UTF-8
+#if open this code to RStudio, after openning it:
+#select File -> Reopen with Encoding -> UTF-8 
+#(Windows: usually encoding is ISO 8859-1)
+#Why change is needed:need to recognised the non-ascii symbol â (it should be an a with a caret!)
 
 #set working file
 setwd(dirname(file.choose()))
@@ -27,7 +29,7 @@ dfJohnMuir31420_31819$textNo <- rep(1:100, each = 4)
 dfJohnMuir31420_31819 <- dfJohnMuir31420_31819[c('textNo', 'text')]
 
 #Form a unique word list of the words in texts of JA and JM
-library(tokenizers)
+if (!require('tokenizers')) install.packages('tokenizers'); library('tokenizers')
 combineTwoLists <- function (list1, list2) {
     n <- c()
     for(x in list1){n<-c(n,x)}
@@ -74,7 +76,6 @@ JM_NoOfWdsInJAnJMUniqWdLst = A(listOfWordsAppearingInBothJAAndJM, dfJohnMuir3142
 JAnJMJoin_NoOfWdsInJAnJMUniqWdLst = rbind(JA_NoOfWdsInJAnJMUniqWdLst, JM_NoOfWdsInJAnJMUniqWdLst)
 JaJmTtl400OrMore = JAnJMJoin_NoOfWdsInJAnJMUniqWdLst[, colSums(JAnJMJoin_NoOfWdsInJAnJMUniqWdLst) >=400]
 JaJmTtl400OrMoreByAlpha = JaJmTtl400OrMore[,order(names(JaJmTtl400OrMore))]
-#?JaJmTtl400OrMoreByAlpha = JaJmTtl400OrMoreByAlpha[-c(2)] # deleting a head
 JaJmTtl400OrMoreByAlphaHeader = colnames(JaJmTtl400OrMoreByAlpha) # a list of 231 words
 
 #formed JA and JM word dataframe (200 x 220)
@@ -119,7 +120,7 @@ dfJaAndJmWdFeqDfLabledRandm_norm <- as.data.frame(lapply(dfJaAndJmWdFeqDfLabledR
 summary(dfJaAndJmWdFeqDfLabledRandm_norm[,1:4])
 
 #KNN!
-library(class)
+if (!require('class')) install.packages('class'); library('class')
 dfJaAndJmWdFeqDfLabledRandm_norm_train <- dfJaAndJmWdFeqDfLabledRandm_norm[1:160,]
 dfJaAndJmWdFeqDfLabledRandm_norm_test <- dfJaAndJmWdFeqDfLabledRandm_norm[161:200,]
 JaOrJm_pred <- knn(dfJaAndJmWdFeqDfLabledRandm_norm_train, dfJaAndJmWdFeqDfLabledRandm_norm_test, dfJaAndJmWdFeqDfLabledRandm[1:160,1], k= 13)

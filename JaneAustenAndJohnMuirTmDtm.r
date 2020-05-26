@@ -7,7 +7,7 @@
 #set working directory and load package tm
 setwd(dirname(file.choose()))
 getwd()
-library(tm)
+if (!require('tm')) install.packages('tm'); library('tm')
 
 #input data and form two dataframes
 if(!file.exists('Gungor_2018_VictorianAuthorAttribution_data-train.csv')){
@@ -64,7 +64,7 @@ dfJaAndJmWdFeqDfLabledRandm_norm <- as.data.frame(lapply(dfJaAndJmWdFeqDfLabledR
 summary(dfJaAndJmWdFeqDfLabledRandm_norm[,1:4])
 
 #KNN!
-library(class)
+if (!require('class')) install.packages('class'); library('class')
 dfJaAndJmWdFeqDfLabledRandm_norm_train <- dfJaAndJmWdFeqDfLabledRandm_norm[1:160,]
 dfJaAndJmWdFeqDfLabledRandm_norm_test <- dfJaAndJmWdFeqDfLabledRandm_norm[161:200,]
 JaOrJm_pred <- knn(dfJaAndJmWdFeqDfLabledRandm_norm_train, dfJaAndJmWdFeqDfLabledRandm_norm_test, dfJaAndJmWdFeqDfLabledRandm[1:160,1], k= 13)
