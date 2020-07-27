@@ -100,7 +100,7 @@ table(pred = whichOfThe7_pred, true_7Authors_KNN = dfAll7WdFeqDfLabledRandm[281:
 #SVM!
 if (!require('e1071')) install.packages('e1071'); library('e1071')
 # simple: no tunning
-whichOfThe7_svm_model <- svm(dfAll7WdFeqDfLabledRandm_norm_train, dfAll7WdFeqDfLabledRandm[1:280,1], type = 'C')
+whichOfThe7_svm_model <- svm(dfAll7WdFeqDfLabledRandm_norm_train, as.factor(dfAll7WdFeqDfLabledRandm[1:280,1]), type = 'C')
 pred <- predict(whichOfThe7_svm_model, dfAll7WdFeqDfLabledRandm_norm_test)
 table(pred, true_7Authors_SVM = dfAll7WdFeqDfLabledRandm[281:350,1]) #all correct
 
@@ -200,7 +200,7 @@ table(pred = pred_svm_after_tune_GeImmBlw, true_GeorgeEliotImmBlw_tunedSVM = rep
 #The KNN and the SVM  test machines produced above can recognise who wrote the 11 portions of words with 100% accuracy. 
 
 dfGutenberg2CitiesMddlemarchTess <- read.table('GutenbergATaleOf2C3Middlemarch5TessOfTheDUrb3Each4000Words.csv', header = TRUE, sep = (','), comment.char = "#")
-dfGutenberg2CitiesMddlemarchTess <- rbind(dfGutenbergATaleOf2C, dfGutenbergMiddlemarch, dfGutenbergTessOfTheDUrb)
+#?#don't know why this line is here: dfGutenberg2CitiesMddlemarchTess <- rbind(dfGutenbergATaleOf2C, dfGutenbergMiddlemarch, dfGutenbergTessOfTheDUrb)
 dfGutenberg2CitiesMddlemarchTess_corpus <- VCorpus(VectorSource(dfGutenberg2CitiesMddlemarchTess$text))
 dfGutenberg2CitiesMddlemarchTess_dtDf <- as.data.frame(as.matrix(DocumentTermMatrix(dfGutenberg2CitiesMddlemarchTess_corpus, control=list(wordLengths = c(1, Inf)))))
 #dfGutenberg2CitiesMddlemarchTess_dtDf$textNo <- NULL

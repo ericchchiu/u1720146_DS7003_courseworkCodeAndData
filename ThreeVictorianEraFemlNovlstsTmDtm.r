@@ -77,8 +77,8 @@ table(pred = HmOrLmOrMc_pred, true_HelenMathers_LucasMalet_MarieCorelli_KNN = df
 #k = 11 perform the best, only one error: 1 MC was misjudged as LM
 
 #SVM! tune automatically
-if (!require('e1071')) install.packages('e1071'); library('e1071')library
-HmOrLmOrMc_svm_model <- svm(dfHmLmMcWdFeqDfLabledRandm_norm_train, dfHmLmMcWdFeqDfLabledRandm[1:120,1], type = 'C')
+if (!require('e1071')) install.packages('e1071'); library('e1071')
+HmOrLmOrMc_svm_model <- svm(dfHmLmMcWdFeqDfLabledRandm_norm_train, as.factor(dfHmLmMcWdFeqDfLabledRandm[1:120,1]), type = 'C')
 pred <- predict(HmOrLmOrMc_svm_model, dfHmLmMcWdFeqDfLabledRandm_norm_test)
 table(pred, true_HelenMathers_LucasMalet_MarieCorelli_SVM = dfHmLmMcWdFeqDfLabledRandm[121:150,1])
 #all correct
