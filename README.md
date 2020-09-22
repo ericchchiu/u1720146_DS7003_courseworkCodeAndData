@@ -1,3 +1,5 @@
+Note: a couple of the command as.factor were added to the code due to R was upgraded from 3.x.x to 4.x.x 
+
 WARNING!!! because there is a non-ascii character â in the code, after importing the code to RStudio, one should select File -> Reopen with encoding... then select UTF-8 (Windows)
 
 One of the two data files to be used in this project,  Gungor_2018_VictorianAuthorAttribution_data-train.csv, is too large (259,361KB) to be uploaded to github. Please download it from:
@@ -13,7 +15,7 @@ The another data file, GutenbergATaleOf2C3Middlemarch5TessOfTheDUrb3Each4000Word
 
 Just place all files and the downloaded file mentioned above into a working directory, import the R code files to an RStudio and then run them.
 
-The R code JaneAustenAndJohnMuirTokenizers3Hrs.r needs 3 hours+ to run. If you really want to run it, it is suggested that you should run JaneAustenAndJohnMuirTmDtm first to make sure that your RStudio can run the R code included in this reporsitory.
+The R code JaneAustenAndJohnMuirTokenizers3Hrs.r needs 3 hours+ to run. If you really want to run it, it is suggested that you should run JaneAustenAndJohnMuirTmDtm.r first to make sure that your RStudio can run the R code included in this reporsitory.
 
 For further details, please see the coursework 'A study about using machine learning classifiers KNN and SVM to perform authorship attribution analysis' which is contained in u1720146_DS7003_final.docx
 
